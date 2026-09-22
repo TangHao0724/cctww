@@ -1,11 +1,72 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>首頁</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f6f5f1">
+  <title>地點挑戰 · CCTWW</title>
+  <link rel="stylesheet" href="/game.css">
 </head>
 <body>
-    遊戲頁面，會有問題UI(一次答題都匯回傳紀錄，問題也會接著發回去) 、生命值、計時器(10S)。結算dialog
+  <svg class="icon-sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="cctv-symbol" viewBox="0 0 64 64">
+      <path d="M11 19h31l10 8-6 11H11a4 4 0 0 1-4-4V23a4 4 0 0 1 4-4Z" fill="#ffffff"/>
+      <circle cx="43" cy="28" r="5" fill="#342b71"/>
+      <path d="M26 38v7m-9 0h19m-9 0v10" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+    </symbol>
+  </svg>
+  <main class="game" aria-labelledby="title">
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="CCTWW，返回首頁">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64" focusable="false" aria-hidden="true"><use href="#cctv-symbol"></use></svg></span>
+        <span class="brand-name">CCTWW <small>台灣公路觀察室</small></span>
+      </a>
+      <span class="tag"><span class="tag-dot" aria-hidden="true"></span> 地點挑戰</span>
+    </header>
+
+    <div class="game-topline">
+      <div class="round-label"><span class="round-icon" aria-hidden="true">?</span><span>觀察路上的線索，猜猜鏡頭在哪裡</span></div>
+      <section class="status" aria-label="遊戲狀態"><span>剩餘生命</span><strong id="life" aria-live="polite">—</strong></section>
+    </div>
+
+    <div class="play-area">
+      <section class="camera-panel" aria-label="本題監視器畫面">
+        <div class="camera-heading"><span class="live-dot" aria-hidden="true"></span><span>公路即時視角</span><span class="camera-number">CCTV</span></div>
+        <div class="camera">
+          <img id="cctv" alt="本題公路監視器畫面" hidden>
+          <iframe id="cctv-frame" title="本題公路監視器畫面" sandbox="allow-scripts" hidden></iframe>
+          <p id="camera-status" role="status">等待題目載入</p>
+        </div>
+        <p class="camera-caption">仔細看路牌、地形與周圍景色。</p>
+      </section>
+
+      <section class="answer-panel" aria-labelledby="title">
+        <div class="question"><p class="eyebrow">選出正確的地點</p><h1 id="title">你覺得這是哪裡？</h1><p id="hint">正在準備題目…</p></div>
+        <div class="timer" aria-label="作答倒數">
+          <div class="timer-label"><label for="countdown">作答時間</label><strong><span id="remaining">10</span><small>秒</small></strong></div>
+          <progress id="countdown" max="10" value="10">10 秒</progress>
+        </div>
+        <div id="options" class="options" role="group" aria-label="四個答案選項"></div>
+        <section id="feedback" class="feedback" role="status" aria-live="polite">正在確認遊戲…</section>
+        <button id="next" class="next" type="button" hidden>下一題</button>
+      </section>
+    </div>
+
+    <footer class="site-footer"><a href="/" id="leave">← 離開遊戲</a><span>沿著公路，認識台灣。</span></footer>
+    <dialog id="game-result" class="result-dialog" aria-labelledby="result-title" aria-describedby="result-description">
+      <div class="result-icon" aria-hidden="true">
+        <svg viewBox="0 0 64 64" focusable="false" aria-hidden="true"><use href="#cctv-symbol"></use></svg>
+      </div>
+      <p class="eyebrow">本次挑戰結束</p>
+      <h2 id="result-title">公路探險完成！</h2>
+      <p id="result-description">本次答對 <strong id="result-count">0</strong> 題</p>
+      <div class="result-actions">
+        <button id="result-restart" type="button">重新開始</button>
+        <a href="/">返回首頁</a>
+      </div>
+    </dialog>
+    <noscript>遊戲需要 JavaScript，請啟用後重新開啟。</noscript>
+  </main>
+  <script src="/game.js"></script>
 </body>
 </html>
