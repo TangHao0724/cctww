@@ -1,0 +1,22 @@
+/* CCTWW shared visual tokens. Other pages can import this file before page styles. */
+:root {
+  --cctww-font: system-ui, -apple-system, "Noto Sans TC", sans-serif;
+  --cctww-page: #f6f5f1;
+  --cctww-surface: #ffffff;
+  --cctww-ink: #202a37;
+  --cctww-muted: #6e7885;
+  --cctww-line: #e5e6e3;
+  --cctww-primary: #46318e;
+  --cctww-primary-hover: #392779;
+  --cctww-primary-soft: #f0edfb;
+  --cctww-focus: #a38adf;
+  --cctww-error: #b04d48;
+  --cctww-success: #238557;
+  --cctww-option-red: #f9e9e7;
+  --cctww-option-blue: #e9eefb;
+  --cctww-option-yellow: #fbf0d7;
+  --cctww-option-green: #e5f3e9;
+  --cctww-card-radius: 22px;
+  --cctww-control-radius: 11px;
+  --cctww-card-shadow: 0 10px 30px #202a3709;
+}
