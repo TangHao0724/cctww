@@ -1,14 +1,14 @@
 /* Server owns answers and life. UI never changes either optimistically. */
 (() => {
   'use strict';
-  const el = Object.fromEntries(['life', 'cctv', 'cctv-frame', 'camera-status', 'hint', 'remaining', 'countdown', 'options', 'feedback', 'next', 'leave', 'game-result', 'result-restart', 'result-count'].map(id => [id, document.getElementById(id)]));
+  const el = Object.fromEntries(['life', 'cctv', 'cctv-frame', 'camera-status', 'hint', 'remaining', 'countdown', 'timer-marker', 'options', 'feedback', 'next', 'leave', 'game-result', 'result-restart', 'result-count'].map(id => [id, document.getElementById(id)]));
   const state = { gameID: null, questionID: null, cctvUUID: null, life: null, correctCount: 0, selectedAnswerID: null, correctAnswerID: null, remainingTime: 10, timerID: null, isSubmitting: false, isShowingFeedback: false };
   let deadline = 0, active = true, loading = false, answered = false;
   let nextAction = null, feedbackTimer = null;
   const stopTimer = () => { clearInterval(state.timerID); state.timerID = null; };
   const disableOptions = () => { el.options.querySelectorAll('button').forEach(button => { button.disabled = true; }); };
   function feedback(message, tone = '') { el.feedback.textContent = message; el.feedback.dataset.tone = tone; }
-  function action(label, callback) { el.next.textContent = label; nextAction = callback; el.next.hidden = false; }
+  function action(label, callback) { el.next.querySelector('.glass-label').textContent = label; nextAction = callback; el.next.hidden = false; }
   function renderLife() {
     el.life.replaceChildren();
     for (let index = 0; index < 3; index++) {
@@ -121,9 +121,11 @@
     stopTimer();
     deadline = performance.now() + 10000;
     const tick = () => {
-      state.remainingTime = Math.max(0, Math.ceil((deadline - performance.now()) / 1000));
+      const secondsLeft = Math.max(0, (deadline - performance.now()) / 1000);
+      state.remainingTime = Math.ceil(secondsLeft);
       el.remaining.textContent = String(state.remainingTime);
-      el.countdown.value = state.remainingTime;
+      el.countdown.value = secondsLeft;
+      el['timer-marker'].style.left = `${secondsLeft * 10}%`;
       if (state.remainingTime === 0) void submitAnswer(null);
     };
     state.timerID = setInterval(tick, 100);
@@ -135,7 +137,7 @@
     el.options.replaceChildren(); el.next.hidden = true; nextAction = null;
     state.isShowingFeedback = false; state.questionID = null; state.cctvUUID = null; answered = false;
     state.selectedAnswerID = null; state.correctAnswerID = null;
-    el.remaining.textContent = '10'; el.countdown.value = 10;
+    el.remaining.textContent = '10'; el.countdown.value = 10; el['timer-marker'].style.left = '100%';
     el.hint.textContent = '正在準備題目…';
     el['camera-status'].hidden = false; el['camera-status'].textContent = '等待題目載入';
     feedback('正在載入題目…');
@@ -153,7 +155,9 @@
         const button = document.createElement('button');
         const optionID = optionIDs[index];
         button.type = 'button'; button.className = 'option'; button.dataset.answerId = String(optionID);
-        button.textContent = `${String.fromCharCode(65 + index)}　${option.name}`; button.disabled = true;
+        const key = document.createElement('span'); key.className = 'option-key'; key.textContent = String.fromCharCode(65 + index);
+        const name = document.createElement('span'); name.className = 'option-name glass-label'; name.textContent = option.name;
+        button.append(key, name); button.disabled = true;
         button.addEventListener('click', () => void submitAnswer(optionID)); el.options.append(button);
       });
       try { await loadCCTV(state.cctvUUID); }
@@ -237,7 +241,10 @@
         const correct = button.dataset.answerId === String(data.answer);
         button.classList.toggle('correct', correct);
         button.classList.toggle('wrong', !data.isRight && ansID !== null && button.dataset.answerId === String(ansID));
-        if (correct) button.textContent += ' ✓ 正確答案';
+        if (correct) {
+          const note = document.createElement('span'); note.className = 'option-result'; note.textContent = '✓ 正確答案';
+          button.append(note);
+        }
       });
       feedback(`${data.isRight ? '答對了！' : ansID === null ? '時間到了！' : '答錯了！'}${state.life === 0 ? ' 挑戰結束，查看本次結果。' : ' 正確答案已標示，即將進入下一題。'}`);
       const advance = () => { clearTimeout(feedbackTimer); if (!active) return; state.life === 0 ? showResult() : void loadQuestion(); };
