@@ -1,11 +1,93 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>首頁</title>
-    </head>
-    <body>
-        遊戲頁面，會有問題UI(一次答題都匯回傳紀錄，問題也會接著發回去) 、生命值、計時器(10S)。結算dialog
-    </body>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111318">
+  <title>地點挑戰 · CCTWW</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800&amp;family=Oxanium:wght@400;500;600;700;800&amp;display=swap">
+  <link rel="stylesheet" href="game.css">
+</head>
+<body>
+  <svg class="icon-sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="retina-iris">
+        <stop offset="0" stop-color="#07132f"/>
+        <stop offset="0.45" stop-color="#1d5cb0"/>
+        <stop offset="0.78" stop-color="#4895e2"/>
+        <stop offset="1" stop-color="#071c46"/>
+      </radialGradient>
+    </defs>
+    <symbol id="retina-symbol" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="47" fill="none" stroke="#d7eeff" stroke-width="1.5"/>
+      <path d="M50.0 11.0L50.0 3.0M60.3 11.7L61.7 6.3M70.2 15.0L71.7 12.4M79.1 20.9L82.6 17.4M83.8 30.5L88.4 27.9M88.3 39.7L95.4 37.8M90.4 50.0L95.2 50.0M89.7 60.6L91.9 61.2M83.8 69.5L89.9 73.0M78.1 78.1L81.3 81.3M70.2 85.0L73.5 90.7M60.6 89.7L61.7 93.7M50.0 89.0L50.0 93.4M39.7 88.3L38.1 94.5M29.8 85.0L27.9 88.4M20.9 79.1L16.8 83.2M16.2 69.5L10.9 72.6M11.7 60.3L8.1 61.2M9.6 50.0L3.9 50.0M10.3 39.4L7.2 38.5M16.2 30.5L9.3 26.5M21.9 21.9L18.0 18.0M29.8 15.0L28.3 12.4M39.4 10.3L38.1 5.5" fill="none" stroke="#eaf7ff" stroke-width="1.35" stroke-linecap="round" opacity=".84"/>
+      <circle cx="50" cy="50" r="39" fill="url(#retina-iris)" stroke="#5da8ff" stroke-width=".7"/>
+      <path d="M50.0 32.0L50.0 11.0M52.4 31.5L54.9 13.1M55.0 31.3L59.2 15.8M57.7 31.4L64.6 14.8M59.0 34.4L68.1 18.6M61.4 35.2L73.7 19.1M63.7 36.3L76.3 23.7M65.9 37.8L78.1 28.4M65.6 41.0L83.0 30.9M67.3 42.8L83.5 36.1M68.7 45.0L87.7 39.9M69.9 47.4L86.9 45.1M68.0 50.0L85.4 50.0M68.5 52.4L87.8 55.0M68.7 55.0L85.1 59.4M68.6 57.7L86.0 64.9M65.6 59.0L82.2 68.6M64.8 61.4L78.1 71.6M63.7 63.7L76.9 76.9M62.2 65.9L72.1 78.8M59.0 65.6L69.5 83.8M57.2 67.3L64.2 84.4M55.0 68.7L59.2 84.2M52.6 69.9L55.0 87.8M50.0 68.0L50.0 86.3M47.6 68.5L44.9 88.7M45.0 68.7L40.4 85.9M42.3 68.6L36.5 82.7M41.0 65.6L31.0 83.0M38.6 64.8L27.9 78.8M36.3 63.7L22.4 77.6M34.1 62.2L20.5 72.6M34.4 59.0L19.3 67.7M32.7 57.2L14.8 64.6M31.3 55.0L14.9 59.4M30.1 52.6L11.3 55.1M32.0 50.0L12.8 50.0M31.5 47.6L14.9 45.4M31.3 45.0L13.2 40.1M31.4 42.3L16.5 36.1M34.4 41.0L16.2 30.5M35.2 38.6L20.5 27.4M36.3 36.3L25.0 25.0M37.8 34.1L26.8 19.8M41.0 34.4L31.8 18.6M42.8 32.7L35.1 14.0M45.0 31.3L40.4 14.1M47.4 30.1L45.4 14.9" fill="none" stroke="#9ed6ff" stroke-width="1.15" stroke-linecap="round" opacity=".83"/>
+      <path d="M52.7 29.2L55.4 9.4M58.3 30.0L65.0 13.8M63.6 32.2L72.8 20.3M68.3 35.9L81.8 25.6M69.4 42.0L85.4 35.3M71.5 47.2L90.6 44.6M72.2 52.9L88.9 55.1M71.3 58.8L84.6 64.3M66.7 62.8L81.8 74.4M63.2 67.2L73.3 80.4M58.6 70.7L65.7 87.9M53.0 72.9L55.1 88.9M47.3 70.8L45.1 87.1M41.7 70.0L34.7 87.0M36.4 67.8L26.7 80.4M31.7 64.1L17.5 75.0M30.6 58.0L13.8 65.0M28.5 52.8L12.9 54.9M27.8 47.1L10.2 44.8M28.7 41.2L14.6 35.3M33.3 37.2L17.5 25.0M36.8 32.8L26.1 18.9M41.4 29.3L35.7 15.4M47.0 27.1L44.8 10.2" fill="none" stroke="#f3fbff" stroke-width=".8" stroke-linecap="round" opacity=".62"/>
+      <circle cx="50" cy="50" r="23" fill="none" stroke="#d7efff" stroke-width=".7" opacity=".7"/>
+      <circle cx="50" cy="50" r="17" fill="#081936" stroke="#b8e7ff" stroke-width="1.7"/>
+      <circle cx="50" cy="50" r="13" fill="#020b20"/>
+      <circle cx="50.0" cy="5.0" r="1.3" fill="#f6fcff"/><circle cx="81.8" cy="18.2" r="1.3" fill="#f6fcff"/><circle cx="95.0" cy="50.0" r="1.3" fill="#f6fcff"/><circle cx="81.8" cy="81.8" r="1.3" fill="#f6fcff"/><circle cx="50.0" cy="95.0" r="1.3" fill="#f6fcff"/><circle cx="18.2" cy="81.8" r="1.3" fill="#f6fcff"/><circle cx="5.0" cy="50.0" r="1.3" fill="#f6fcff"/><circle cx="18.2" cy="18.2" r="1.3" fill="#f6fcff"/>
+      <path d="M18 19l5 2m53-1l5-2M18 81l5-2m53 1l5 2" fill="none" stroke="#9dd7ff" stroke-width=".8" opacity=".8"/>
+    </symbol>
+  </svg>
+  <main class="game" aria-labelledby="title">
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="CCTWW，返回首頁">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 100 100" focusable="false" aria-hidden="true"><use href="#retina-symbol"></use></svg></span>
+        <span class="brand-name">CCTWW <small>台灣公路觀察室</small></span>
+      </a>
+      <span class="tag"><span class="tag-dot" aria-hidden="true"></span> 地點挑戰</span>
+    </header>
+
+    <div class="game-topline">
+      <div class="round-label"><span class="round-icon" aria-hidden="true">?</span><span>觀察路上的線索，猜猜鏡頭在哪裡</span></div>
+      <section class="status" aria-label="遊戲狀態"><span>剩餘生命</span><strong id="life" aria-live="polite">—</strong></section>
+    </div>
+
+    <div class="play-area">
+      <section class="camera-panel" aria-label="本題監視器畫面">
+        <div class="camera-heading"><span class="live-dot" aria-hidden="true"></span><span>公路即時視角</span><span class="camera-number">CCTV</span></div>
+        <div class="camera">
+          <img id="cctv" alt="本題公路監視器畫面" hidden>
+          <iframe id="cctv-frame" title="本題公路監視器畫面" sandbox="allow-scripts" hidden></iframe>
+          <p id="camera-status" role="status">等待題目載入</p>
+        </div>
+        <p class="camera-caption">仔細看路牌、地形與周圍景色。</p>
+      </section>
+
+      <section class="answer-panel" aria-labelledby="title">
+        <div class="question"><p class="eyebrow">選出正確的地點</p><h1 id="title">你覺得這是哪裡？</h1><p id="hint">正在準備題目…</p></div>
+        <div class="timer" aria-label="作答倒數">
+          <div class="timer-label"><label for="countdown">作答時間</label><strong><span id="remaining">10</span><small>秒</small></strong></div>
+          <div class="timer-track">
+            <progress id="countdown" max="10" value="10">10 秒</progress>
+            <span id="timer-marker" class="timer-marker" aria-hidden="true"></span>
+          </div>
+        </div>
+        <div id="options" class="options" role="group" aria-label="四個答案選項"></div>
+        <section id="feedback" class="feedback" role="status" aria-live="polite">正在確認遊戲…</section>
+        <button id="next" class="next" type="button" hidden><span class="glass-label">下一題</span></button>
+      </section>
+    </div>
+
+    <footer class="site-footer"><a href="/" id="leave">← 離開遊戲</a><span>沿著公路，認識台灣。</span></footer>
+    <dialog id="game-result" class="result-dialog" aria-labelledby="result-title" aria-describedby="result-description">
+      <div class="result-icon" aria-hidden="true">
+        <svg viewBox="0 0 100 100" focusable="false" aria-hidden="true"><use href="#retina-symbol"></use></svg>
+      </div>
+      <p class="eyebrow">本次挑戰結束</p>
+      <h2 id="result-title">公路探險完成！</h2>
+      <p id="result-description">本次答對 <strong id="result-count">0</strong> 題</p>
+      <div class="result-actions">
+        <button id="result-restart" type="button"><span class="glass-label">重新開始</span></button>
+        <a href="/"><span class="glass-label">返回首頁</span></a>
+      </div>
+    </dialog>
+    <noscript>遊戲需要 JavaScript，請啟用後重新開啟。</noscript>
+  </main>
+  <script src="game.js"></script>
+</body>
 </html>
