@@ -1,11 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>結算</title>
-</head>
-<body>
-     顯示所有題目與正確答案(最後執行)。排行榜。結尾與感謝文字。
-</body>
+<html lang="zh-Hant">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>CCTWW Result</title>
+        <link rel="stylesheet" href="result.css" />
+    </head>
+    <body>
+        <button id="openResult" class="ghost-btn">Result</button>
+
+        <div class="dialog-backdrop" id="resultBackdrop" hidden>
+            <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
+
+                <header class="dialog-head">
+                    <h2 id="resultTitle">遊戲結算</h2>
+                    <button class="icon-btn" id="closeResult" aria-label="關閉">✕</button>
+                </header>
+
+                <!-- 狀態徽章：finish / leaved / playing / timeout -->
+                <div class="result-status" id="resultStatus" data-status="finish">
+                    <span class="status-badge" id="statusBadge">正常完成</span>
+                    <span class="status-note" id="statusNote"></span>
+                </div>
+
+                <!-- 分數摘要 -->
+                <div class="summary">
+                    <div class="summary-item">
+                        <span class="summary-label">答對題數 point</span>
+                        <span class="summary-value" id="pointValue">—</span>
+                    </div>
+                    <div class="summary-divider" aria-hidden="true"></div>
+                    <div class="summary-item">
+                        <span class="summary-label">總耗時 total_time</span>
+                        <span class="summary-value" id="timeValue">—</span>
+                    </div>
+                </div>
+
+                <!-- 錯題區：error_question -->
+                <section class="errors">
+                    <h3 class="errors-title">
+                        答錯題目回顧
+                        <span class="errors-count" id="errorsCount">0</span>
+                    </h3>
+                    <div class="errors-list" id="errorsList">
+                        <!-- JS 動態插入 -->
+                    </div>
+                    <p class="errors-empty" id="errorsEmpty" hidden>本局全部答對，沒有錯題 🎉</p>
+                </section>
+
+                <div class="result-actions">
+                    <button class="ghost-btn full" id="againBtn">再玩一次</button>
+                    <button class="primary-btn full" id="rankBtn">查看排行榜</button>
+                </div>
+            </div>
+        </div>
+        <script src="result.js"></script>
+    </body>
 </html>
