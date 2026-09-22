@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>CCTWW — 排行榜</title>
+        <link rel="stylesheet" href="ranking.css" />
+    </head>
+    <body>
+        <!-- 排行榜：對應 GET /api/ranking -->
+        <main class="ranking-panel">
+            <header class="ranking-head">
+                <div>
+                    <h1 class="ranking-title">排行榜</h1>
+                    <p class="ranking-sub">只有完成遊戲（finish）才會列入</p>
+                </div>
+                <button class="icon-refresh" id="refreshBtn" aria-label="重新整理">⟳</button>
+            </header>
+
+            <!-- 欄位標題 + 提示 -->
+            <div class="ranking-columns">
+                <span class="col col-rank">排名</span>
+                <span class="col col-name">玩家 name</span>
+                <span class="col col-score" title="累計分數">分數 score</span>
+                <span class="col col-time"  title="答題總時間（秒）">時間 time</span>
+            </div>
+            
+            <!-- 榜單 -->
+            <ol class="ranking-list" id="rankingList">
+                <!-- JS 動態插入 -->
+            </ol>
+
+            <!-- 狀態 -->
+            <p class="ranking-state" id="rankingState" hidden>載入中…</p>
+        </main>
+        <script src="ranking.js"></script>
+    </body>
+</html>
