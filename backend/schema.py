@@ -1,5 +1,9 @@
 from datetime import datetime
 from decimal import Decimal
+import enum
+from typing import Literal
+
+from pydantic import BaseModel, Field
 
 class CCTV:
     def __init__(self, cctvID: str, cctv_name: str = None, stream_url: str = None, 
@@ -50,3 +54,95 @@ class CCTV:
             self.subAuthorityCode, self.location_type, self.road_class,
             self.road_name, self.dir, self.mile, self.lon, self.lat
         )
+
+class SignRequest(BaseModel):
+    name: str | None = None
+    email: str | None = None
+
+class Rank(BaseModel):
+    id:int 
+    name:str
+    score:int
+    total_time:int
+    total_stage:int
+    finish_at:datetime
+    percent:str
+
+class Raw_rank(BaseModel):
+    name:str
+    score:int
+    total_time:int
+    total_stage:int
+    finish_at:datetime
+
+class Option(BaseModel):
+    id:int
+    name:str
+    cctvUUID:str|None = None
+    cctvID: int|None = None
+    
+class Des(BaseModel):
+    dir:Literal["N","E","W","S"]
+    class_type:str
+    name:str
+    mile:str
+class Question(BaseModel):
+    questionID:str
+    question_cctvID:str
+    game_stage:int
+    des:Des
+    options:list[Option]
+    life:int= Field(ge=0, le=3)
+
+class Raw_question(BaseModel):
+    questionUUID:str
+    question_cctvintID:int
+    game_stage:int
+    options:list[Option]
+class Road_class(enum.IntEnum):
+    NATIONAL = 0
+    PROVINCIAL_EXPRESSWAY = 1
+    CITY_EXPRESSWAY = 2
+    PROVINCIAL = 3
+    COUNTY = 4
+    TOWNSHIP = 5
+    CITY = 6
+
+class Raw_question_result(BaseModel):
+    isRight:bool
+    answer:int
+    gameID:int
+class Question_result(BaseModel):
+    isRight:bool
+    answer:int
+    life:int
+
+class Ids(BaseModel):
+    ID:int
+    UUID:str
+
+class Send_data(BaseModel):
+    questionID:str
+    ansid:int|None
+    timestamp:int
+
+class Leave_data(BaseModel):
+    gameID:str
+
+class Result_data(BaseModel):
+    total_time:int
+    point:int
+    error_questions:list[Error_question]
+class Error_question(BaseModel):
+    questionUUID:str
+    question_cctvintID:int
+    game_stage:int
+    answerID:int 
+    options:list[Result_Option]
+class Result_Option(BaseModel):
+    id:int
+    name:str
+    cctvUUID:str|None = None
+    cctvID: int|None = None
+    isAns:bool = False
+    
