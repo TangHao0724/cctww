@@ -1,20 +1,39 @@
 # CCTWW(透過CCTV猜目前在哪裡？)
 
-透過交通部公開的xml資料，獲取所有在公路上的cctv資訊以及鏡頭。用選擇的方法讓玩家猜測！
+## 專案大綱
 
-# 這裡是dev，如果合併請找這裡
+透過交通部公開的xml資料，獲取所有在公路上的cctv資訊以及鏡頭。用選擇的方法讓玩家來猜鏡頭在哪裡吧！
 
-## 指令速記
-pip freeze > requirements.txt 輸出環境的插件記錄到requirement
-pip install -r requirements.txt 輸入requirement環境內所有插件
-deactivate 離開環境
+[展示網址](http://32.236.160.64:8000/)
 
-## 切換到此專案環境
+## 緣由
 
-# 切記測試時，將環境切換到專案內目前環境。
+[公開資料](https://thbapp.thb.gov.tw/opendata/)
 
-1. Powershell  執行 .venv/Scripts/activate.ps1  
-2. 確認目前terminal開頭帶有(.venv)，代表進入環境
-3. 如果不確定專案使否有新插件，執行pip install -r requirements.txt 安裝所有表上的插件做檢查
-4. 如果有安裝插件，請使用 "pip freeze > requirements.txt " 將新增的插件更新到表上
-5. 離開環境使用deactivate。
+[cctvdata](https://cctv-maintain.thb.gov.tw/opendataCCTVs.xml)
+
+藉由公路局所公開的各路的CCTV(以mjpg進行直播串聯。)以及CCTV的內容描述，便可以規畫成一個環遊台灣的猜測遊戲！。
+我們可以藉由畫面中的地點、陽光、車流、背景。去推測判斷該攝影在哪個位置！
+
+
+##  組員分工
+
+本組採用前後端分離的模式開發
+
+### 唐祥豪
+
+1. 專案決定與規畫，決定專案的內容與開發方法，以及制定API銜接規格。
+2. 規劃DB SCHEMA。
+3. 撰寫後端API。
+4. 處理佈署問題。
+
+### 游家源
+
+1. 主導前端畫面美術、UI設計。
+2. 製作 "/game"，主要遊玩內容頁面。並串接API。
+3. 專案規畫協助。
+   
+### 翁振齊
+
+1. 跟隨家源的UI風格、製作 "/"、"/ranking"頁面並串聯功能。
+2. 串接API功能。
