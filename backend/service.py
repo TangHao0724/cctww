@@ -66,6 +66,7 @@ def ranking()-> list[Rank]:
                 id=rank,
                 name=v.name,
                 score=v.score,
+                total_stage=v.total_stage,
                 total_time=v.total_time,
                 finish_at=v.finish_at,
                 percent=f"{rank / len(raw_list):.2%}"
@@ -122,8 +123,8 @@ def create_question(gameUUID:str,option_count:int) ->Question:
     gameID = get_gameID(gameUUID)
     question = Question(
         questionID=questionUUID,
-        question_cctvID=quest_cctv_token,
-        game_stage=now_stage+1,
+        question_cctvUUID=quest_cctv_token,
+        game_stage=now_stage,
         options=options,
         life=life,
         des=des
@@ -159,16 +160,20 @@ def search_question(gameUUID:str) ->Question|None:
     )
     question = Question(
         questionID=raw.questionUUID,
-        question_cctvID=quest_cctv_token,
+        question_cctvUUID=quest_cctv_token,
         game_stage=raw.game_stage,
         des = des,
         options=raw.options,
         life=life
     )
+    print("gameid:", gameid)
+    print("stage:", stage)
+    print("raw:", raw)
     return question
 
 def create_quest_stream(token:str):
     key = os.getenv("TOKEN_PW")
+    print("TOKEN:", repr(token))
     data =jwt.decode(token,key,algorithms=["HS256"])
     # 先不做驗證
     cctvID = data["cctvID"]
@@ -196,7 +201,7 @@ def send_answer(answer: Send_data):
     if elapsed > 10_000:
        raw_result = save_answer(answer.questionID,None,elapsed,dt_start_at)
     else:
-        raw_result = save_answer(answer.questionID,answer.ansid,elapsed,dt_start_at)
+        raw_result = save_answer(answer.questionID,answer.ansID,elapsed,dt_start_at)
     quest = quest_result(raw_result)
     if quest.life <= 0:
         print("遊戲結束")

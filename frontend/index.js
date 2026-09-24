@@ -101,7 +101,11 @@ function showImage(img, src) {
         img.src = src;
     });
 }
-
+async function showImg(){
+    ranImg.src=`${API_BASE}/api/rencctv`
+    ranImg.hidden = false;
+    ranStatus.hidden = true;
+}
 function setLoading(on) {
     startBtn.disabled = on;
     startBtn.classList.toggle("loading", on);
@@ -112,5 +116,5 @@ function setStatus(state, text) {
     statusBox.dataset.state = state;
     statusText.textContent = text;
 }
-
-loadRandomPreview();
+showImg();
+// loadRandomPreview();

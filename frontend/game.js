@@ -85,34 +85,39 @@
       throw new Error('CCTV 回應格式不支援');
     } finally { clearTimeout(timeout); }
   }
-  async function loadCCTV(uuid) {
-    resetImage();
-    el['camera-status'].hidden = false;
-    el['camera-status'].textContent = '正在連接國道即時影像…';
-    const endpoint = `/api/game/cctv?${new URLSearchParams({ UUID: uuid })}`;
-    const source = await cameraSource(endpoint);
-    const media = source.kind === 'frame' ? el['cctv-frame'] : el.cctv;
-    await new Promise((resolve, reject) => {
-      let settled = false;
-      const timeout = setTimeout(() => finish(new Error('影像連線逾時')), 15000);
-      const frameCheck = source.kind === 'image' ? setInterval(() => { if (media.naturalWidth > 0) finish(); }, 200) : null;
-      const finish = error => {
-        if (settled) return;
-        settled = true;
-        clearTimeout(timeout);
-        clearInterval(frameCheck);
-        media.onload = null;
-        media.onerror = null;
-        error ? reject(error) : resolve();
-      };
-      media.onload = () => finish();
-      media.onerror = () => finish(new Error('無法顯示這支監視器'));
-      media.src = source.src;
-    });
-    if (!active || state.cctvUUID !== uuid) return;
-    media.hidden = false;
+  // async function loadCCTV(uuid) {
+  //   resetImage();
+  //   el['camera-status'].hidden = false;
+  //   el['camera-status'].textContent = '正在連接國道即時影像…';
+  //   const endpoint = `/api/game/cctv?${new URLSearchParams({ UUID: uuid })}`;
+  //   const source = await cameraSource(endpoint);
+  //   const media = source.kind === 'frame' ? el['cctv-frame'] : el.cctv;
+  //   await new Promise((resolve, reject) => {
+  //     let settled = false;
+  //     const timeout = setTimeout(() => finish(new Error('影像連線逾時')), 15000);
+  //     const frameCheck = source.kind === 'image' ? setInterval(() => { if (media.naturalWidth > 0) finish(); }, 200) : null;
+  //     const finish = error => {
+  //       if (settled) return;
+  //       settled = true;
+  //       clearTimeout(timeout);
+  //       clearInterval(frameCheck);
+  //       media.onload = null;
+  //       media.onerror = null;
+  //       error ? reject(error) : resolve();
+  //     };
+  //     media.onload = () => finish();
+  //     media.onerror = () => finish(new Error('無法顯示這支監視器'));
+  //     media.src = source.src;
+  //   });
+  //   if (!active || state.cctvUUID !== uuid) return;
+  //   media.hidden = false;
+  //   el['camera-status'].hidden = true;
+  // }
+function loadCCTV(uuid) {
+    el.cctv.src = `/api/game/cctv?UUID=${uuid}`;
+    el.cctv.hidden = false;
     el['camera-status'].hidden = true;
-  }
+}
   function showResult() {
     stopTimer(); disableOptions();
     hideAction();
@@ -161,7 +166,7 @@
     if (!data || !validLife(data.life)) throw new Error('題目生命值格式不符');
     if (data.life === 0) return { life: data.life };
 
-    const optionIDs = Array.isArray(data.options) ? data.options.map(option => option?.ID) : [];
+    const optionIDs = Array.isArray(data.options) ? data.options.map(option => option?.id) : [];
     const validOptions = Array.isArray(data.options)
       && data.options.length === OPTION_COUNT
       && data.options.every((option, index) => option && validID(optionIDs[index]) && typeof option.name === 'string')
@@ -180,8 +185,10 @@
   }
   function renderQuestionOptions(options) {
     el.options.replaceChildren();
+    console.log("options",options)
     options.forEach((option, index) => {
       const button = document.createElement('button');
+      console.log("option.ID",option.ID)
       button.type = 'button'; button.className = 'option'; button.dataset.answerId = String(option.ID);
       const key = document.createElement('span'); key.className = 'option-key'; key.textContent = String.fromCharCode(65 + index);
       const name = document.createElement('span'); name.className = 'option-name glass-label'; name.textContent = option.name;
@@ -221,6 +228,7 @@
       state.questionID = question.questionID; state.cctvUUID = question.cctvUUID;
       el.title.textContent = question.title;
       el.hint.textContent = question.hint;
+      console.log("question.options from loadQuestion",question.options)
       renderQuestionOptions(question.options);
       if (!await renderQuestionCamera(question.cctvUUID)) return;
       beginAnswering();

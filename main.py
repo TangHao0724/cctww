@@ -1,12 +1,17 @@
 from fastapi import *
+from fastapi.encoders import jsonable_encoder
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, StreamingResponse
+from fastapi.staticfiles import StaticFiles
 
 from backend.service import create_game_session, create_quest_stream, create_question, leave, ranking, search_question, send_answer, ser_result, sev_cctv_byid, sev_rancctv
 from backend.schema import CCTV, Leave_data, Send_data, SignRequest
 
 import requests
 
+
 app =FastAPI()
+
+app.mount("/frontend", StaticFiles(directory="frontend", html=True), name="frontend")
 
 @app.get("/", include_in_schema=False)
 async def index(request: Request):
@@ -57,7 +62,10 @@ async def get_cctv(ID:int):
 @app.get("/api/ranking",tags=["/index"])
 async def get_ranking():
 	rlist = ranking()
-	return JSONResponse({"ranking_list":[i.model_dump()for i in rlist]},status_code=status.HTTP_200_OK)
+	return JSONResponse(
+        content=jsonable_encoder({"ranking_list": rlist}),
+        status_code=status.HTTP_200_OK
+    )
 
 @app.get("/api/game/question",tags=["/game"])
 async def get_question(gameID:str):
@@ -96,3 +104,5 @@ async def leave_game(data:Leave_data):
 async def send_result(gameID:str):
 	result = ser_result(gameID)
 	return JSONResponse(result.model_dump(),status_code=status.HTTP_200_OK)
+
+

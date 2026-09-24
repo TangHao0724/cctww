@@ -103,9 +103,9 @@ def get_ranking():
                 game = Raw_rank(
                     name=i["name"],
                     score=i["score"],
-                    total_time=i["total_time"],
+                    total_time=0 if i["total_time"] is None else i["total_time"],
                     total_stage=i["current_stage"],
-                    finish_at=i["finish_at"]
+                    finish_at=datetime.now() if i["finish_at"] is None else i["finish_at"]
                     )
                 rank_list.append(game)
 
@@ -331,7 +331,7 @@ def quest_result(result:Raw_question_result) -> Question_result:
             else:
                 cur.execute("""
                     UPDATE games 
-                    SET,current_stage = current_stage+  1 
+                    SET current_stage = current_stage+  1 
                     WHERE ID = %s
                     """, (result.gameID,))
             cur.execute("SELECT life FROM games WHERE ID = %s",(result.gameID,))

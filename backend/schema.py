@@ -78,17 +78,15 @@ class Raw_rank(BaseModel):
 class Option(BaseModel):
     id:int
     name:str
-    cctvUUID:str|None = None
-    cctvID: int|None = None
     
 class Des(BaseModel):
-    dir:Literal["N","E","W","S"]
+    dir:Literal["N","E","W","S","'NE'","NW","SE","SW"]
     class_type:str
     name:str
     mile:str
 class Question(BaseModel):
     questionID:str
-    question_cctvID:str
+    question_cctvUUID:str
     game_stage:int
     des:Des
     options:list[Option]
@@ -123,7 +121,7 @@ class Ids(BaseModel):
 
 class Send_data(BaseModel):
     questionID:str
-    ansid:int|None
+    ansID:int|None
     timestamp:int
 
 class Leave_data(BaseModel):
@@ -140,7 +138,7 @@ class Error_question(BaseModel):
     answerID:int 
     options:list[Result_Option]
 class Result_Option(BaseModel):
-    id:int
+    ID:int
     name:str
     cctvUUID:str|None = None
     cctvID: int|None = None

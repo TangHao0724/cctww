@@ -8,13 +8,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800&amp;family=Oxanium:wght@400;500;600;700;800&amp;display=swap">
-  <link rel="stylesheet" href="game.css">
+  <link rel="stylesheet" href="/frontend/game.css">
 </head>
 <body>
   <main class="game" aria-labelledby="title">
     <header class="site-header">
       <a class="brand" id="brand-home" href="/" aria-label="CCTWW，返回首頁">
-        <span class="brand-mark" aria-hidden="true"><img src="image/retina-logo.svg" alt=""></span>
+        <span class="brand-mark" aria-hidden="true"><img src="/frontend/image/retina-logo.svg" alt=""></span>
         <span class="brand-name">CCTWW <small>台灣公路觀察室</small></span>
       </a>
       <section class="status" aria-label="遊戲狀態"><span>剩餘生命</span><strong id="life" aria-live="polite">—</strong></section>
@@ -57,7 +57,7 @@
 
     <dialog id="game-result" class="result-dialog" aria-labelledby="result-title" aria-describedby="result-description">
       <div class="result-icon" aria-hidden="true">
-        <img src="image/retina-logo.svg" alt="">
+        <img src="/frontend/image/retina-logo.svg" alt="">
       </div>
       <p class="eyebrow">本次挑戰結束</p>
       <h2 id="result-title">公路探險完成！</h2>
@@ -77,6 +77,6 @@
     </dialog>
     <noscript>遊戲需要 JavaScript，請啟用後重新開啟。</noscript>
   </main>
-  <script src="game.js"></script>
+  <script src="/frontend/game.js"></script>
 </body>
 </html>
